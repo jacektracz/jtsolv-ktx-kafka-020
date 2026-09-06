@@ -1,0 +1,17 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: kafka-alerts
+  namespace: monitoring
+spec:
+  groups:
+    - name: kafka.rules
+      rules:
+        - alert: KafkaBrokerDown
+          expr: up{job="kafka"} == 0
+          for: 1m
+          labels:
+            severity: critical
+          annotations:
+            summary: "Kafka broker is down"
+            description: "Kafka broker instance has been unreachable for more than 1 minute."

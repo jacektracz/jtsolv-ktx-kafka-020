@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql-xffm-sql-depl
+  namespace: mysql-xffm-nm
+spec:
+  selector:
+    matchLabels:
+      app: mysql-xffm-sql-depl-managed-pods
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: mysql-xffm-sql-depl-managed-pods
+    spec:
+      containers:
+      - image: mysql:latest
+        name: mysql-xffm-sql-container
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mysql-xffm-sql-secret-dbpassword
+              key: password
+        ports:
+        - containerPort: 3306
+          name: mysql
+        volumeMounts:
+        - name: mysql-xffm-sql-volume-mount
+          mountPath: /var/lib/mysql
+      volumes:
+      - name: mysql-xffm-sql-volume-mount
+        persistentVolumeClaim:
+          claimName: mysql-xffm-sql-pvc

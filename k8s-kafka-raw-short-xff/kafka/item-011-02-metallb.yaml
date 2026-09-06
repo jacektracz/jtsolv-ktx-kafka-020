@@ -1,0 +1,21 @@
+apiVersion: v1
+data:
+  config: |
+    address-pools:
+    - name: my-pool
+      protocol: layer2
+      addresses:
+      - 192.168.55.100-192.168.55.300
+      - 192.168.55.400-192.168.55.600
+kind: ConfigMap
+metadata:
+  labels:
+    app: kafka-xff-app
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"v1","data":{"config":"address-pools:\n- name: my-pool\n  protocol: layer2\n  addresses:\n  - 192.168.55.100-192.168.55.300\n  - 192.168.55.400-192.168.55.600\n"},"kind":"ConfigMap","metadata":{"annotations":{},"creationTimestamp":"2025-03-01T23:20:53Z","name":"config","namespace":"metallb-system","resourceVersion":"11040113","uid":"66a4f101-fd3f-4a6e-a116-6b34bbb6e02a"}}
+  creationTimestamp: "2025-03-01T23:20:53Z"
+  name: config
+  namespace: metallb-system
+  resourceVersion: "42033365"
+  uid: 66a4f101-fd3f-4a6e-a116-6b34bbb6e02a

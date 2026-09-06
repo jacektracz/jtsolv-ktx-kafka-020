@@ -1,0 +1,15 @@
+# Use the contrib collector as base (includes JMX receiver code)
+FROM otel/opentelemetry-collector-contrib:latest
+
+# Set JMX metrics version (change if needed)
+ARG JMX_VERSION=1.31.0
+
+# Download the official JMX metrics ja
+# ADD https://github.com/open-telemetry/opentelemetry-java-contrib/releases/download/v${JMX_VERSION}/opentelemetry-jmx-metrics-${JMX_VERSION}-all.jar /otel/opentelemetry-jmx-metrics.jar
+COPY opentelemetry-jmx-metrics-1.31.0-all.jar /otel/opentelemetry-jmx-metrics.jar
+# Set environment variable to point to JMX jar (optional, can be referenced in config)
+ENV JMX_METRICS_JAR=/otel/opentelemetry-jmx-metrics.jar
+
+# Default command (config will be provided at runtime)
+ENTRYPOINT [ "/otelcontribcol" ]
+CMD [ "--config", "/etc/otelcol/config.yaml" ]

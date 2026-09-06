@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql-xffm-sql-loadbalancer
+  namespace: mysql-xffm-nm
+spec:
+  selector:
+    app: mysql-xffm-sql-depl-managed-pods
+  ports:
+    - port: 63306
+      targetPort: 3306
+  type: LoadBalancer  # For external access (use NodePort if not in a cloud environment)

@@ -1,0 +1,17 @@
+# MetalLB IP range: 192.168.55.247 - 192.168.55.254 (8 IPs)
+
+#  MetalLB ConfigMap YAML:
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  namespace: metallb-system
+  name: config
+data:
+  config: 'address-pools:
+- name: default
+  protocol: layer2
+  addresses:
+  - 192.168.55.247-192.168.55.254'
+
+# YAML written to metallb-config.yaml

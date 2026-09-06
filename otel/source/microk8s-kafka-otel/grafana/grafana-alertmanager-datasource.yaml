@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana-alertmanager-datasource
+  namespace: monitoring
+data:
+  alertmanager-datasource.yaml: |-
+    apiVersion: 1
+    datasources:
+      - name: Alertmanager
+        type: alertmanager
+        access: proxy
+        url: http://alertmanager.monitoring.svc.cluster.local:9093
+        editable: true

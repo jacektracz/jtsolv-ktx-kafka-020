@@ -1,0 +1,30 @@
+# ---- Builder stage: build minimal collector ----
+FROM golang:1.21 AS builder
+
+# Install builder tool
+RUN go install go.opentelemetry.io/collector/cmd/builder@latest
+
+WORKDIR /src
+
+# Create builder manifest
+RUN echo "dist:\n  name: otelcol-custom\n  description: Minimal collector\n  version: 0.1.0\n  output_path: /out\n\nreceivers:\n  - gomod: github.com/open-telemetry/opentelemetry-collector-contrib/receiver/jmxreceiver v0.102.0\nexporters:\n  - gomod: github.com/open-telemetry/opentelemetry-collector/exporter/loggingexporter v0.102.0" > manifest.yaml
+
+# Build the collector
+RUN builder --config manifest.yaml
+
+# ---- Final minimal image ----
+FROM debian:bullseye-slim
+
+# Copy the custom collector binary
+COPY --from=builder /out/otelcol-custom /otelcol
+
+# Download official JMX metrics JAR
+ARG JMX_VERSION=1.31.0
+ADD https://github.com/open-telemetry/opentelemetry-java-contrib/releases/download/v${JMX_VERSION}/opentelemetry-jmx-metrics-${JMX_VERSION}-all.jar /otel/opentelemetry-jmx-metrics.jar
+
+# Optional env var to reference jar
+ENV JMX_METRICS_JAR=/otel/opentelemetry-jmx-metrics.jar
+
+# Entrypoint and default CMD
+ENTRYPOINT ["/otelcol"]
+CMD ["--config", "/etc/otelcol/config.yaml"]

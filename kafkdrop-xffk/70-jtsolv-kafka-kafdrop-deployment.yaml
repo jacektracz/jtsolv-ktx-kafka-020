@@ -1,0 +1,92 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kafdrop-xffk-apps-kafdrop-depl
+  namespace: kafdrop-xffk-nm
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kafdrop-xffk-apps-kafdrop-depl-managed-pods
+  template:
+    metadata:
+      labels:
+        app: kafdrop-xffk-apps-kafdrop-depl-managed-pods
+    spec:
+      containers:
+      - name: kafdrop-xffk-apps-kafdrop-container
+        image: localhost:32000/jtsolv-kafka-kafdrop:4.1.3
+        ports:
+        - containerPort: 9000
+        env:
+        - name: ALLOW_ANONYMOUS_LOGIN
+          value: "yes"          
+        - name: SPRING_DATASOURCE_URL
+          #value: jdbc:mysql://192.168.55.216:63306/jtsolv_gamedices_03?useUnicode=true&characterEncoding=utf8&useSSL=false
+          value: jdbc:mysql://mysql-xffm-sql-loadbalancer.mysql-xffm-nm:63306/jtsolv_gamedices_03?useUnicode=true&characterEncoding=utf8&useSSL=false          
+        - name: SPRING_DATASOURCE_USERNAME
+          value: root
+        - name: SPRING_DATASOURCE_PASSWORD
+          value: jtsolvp
+        - name: LOGGING_LEVEL_ORG_HIBERNATE
+          value: TRACE
+        - name: LOGGING_LEVEL_ROOT
+          value: TRACE        
+        - name:  SPRING_SQL_INIT_MODE
+          value: NEVER
+        - name:  SERVER_PORT
+          value: "55566"
+
+        - name:  KAFKA_LISTENERS 
+          value: "INTERNAL://:9092,CONTROLLER://:9093,EXTERNAL://:9094"
+
+        - name:  KAFKA_ADVERTISED_LISTENERS
+          value: "INTERNAL://kafka-xff-sts-0.kafka-xff-headless-service.kafka-xff-nm.svc.cluster.local:9092,EXTERNAL://192.168.55.103:30092,CONTROLLER://kafka-xff-sts-0.kafka-xff-headless-service.kafka-xff-nm.svc.cluster.local:9093"
+
+        - name:  KAFKA_LISTENER_SECURITY_PROTOCOL_MAP
+          value: "INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT"
+
+        - name:  KAFKA_INTER_BROKER_LISTENER_NAME
+          value: "INTERNAL"
+
+        - name: KAFKA_ZOOKEEPER_SESSION_TIMEOUT 
+          value: "6000"
+
+        - name:  KAFKA_RESTART_ATTEMPTS
+          value: "10"
+
+        - name:  KAFKA_RESTART_DELAY
+          value: "5"
+        - name:  ZOOKEEPER_AUTOPURGE_PURGE_INTERVAL
+
+          value: "0"
+        - name:  KAFKA_BROKER_CONNECT
+          #value: "kafka-external.kafdrop-xffk-nm:9092"
+          value: "192.168.55.103:30092"
+
+        - name:  KAFKA_BROKERCONNECT
+          #value: "kafka-external.kafdrop-xffk-nm:9092"
+          value: "192.168.55.103:30092"
+
+        - name:  KAFKA_SASL_MECHANISM
+          value: "PLAIN"
+
+        - name:  KAFKA_SECURITY_PROTOCOL
+          value: "SASL_PLAINTEXT"
+
+        - name:  KAFKA_TRUSTSTORE_FILE
+          value: "kafka.truststore.jks"
+
+        - name:  KAFKA_PROPERTIES_FILE
+          value: "kafka.properties"
+          
+        - name:  KAFKA_KEYSTORE_FILE
+          value: "kafka.keystore.jks"
+        - name: KAFKA_JMX_PORT
+          value: "9999"
+        - name: KAFKA_JMX_OPTS
+          value: "-Dcom.sun.management.jmxremote=true -Dcom.sun.management.jmxremote.local.only=false -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Djava.rmi.server.hostname=127.0.0.1"
+
+# cd /lkd/2024-apps-python-tools/app/git-repo/src-k8s-apps/k8s-kafka          
+# sudo microk8s kubectl apply -f  70-kafdrop-xffk-apps-kafdrop-deployment
+

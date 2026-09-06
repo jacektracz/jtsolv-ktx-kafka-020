@@ -1,0 +1,17 @@
+FROM otel/opentelemetry-collector-contrib:latest
+COPY ./jmx/opentelemetry-jmx-metrics.jar /otel/opentelemetry-jmx-metrics.jar
+COPY ./jmx/opentelemetry-jmx-metrics-1.31.0-all.jar /otel/opentelemetry-jmx-metrics-1.31.0-all.jar
+COPY ./jmx/opentelemetry-jmx-metrics-1.jar /otel/opentelemetry-jmx-metrics-1.jar
+COPY ./jmx/opentelemetry-jmx-metrics-2.jar /otel/opentelemetry-jmx-metrics-2.jar
+COPY ./jmx/opentelemetry-jmx-metrics-3.jar /otel/opentelemetry-jmx-metrics-3.jar
+COPY ./jmx/opentelemetry-jmx-metrics-4.jar /otel/opentelemetry-jmx-metrics-4.jar
+COPY ./jmx/opentelemetry-jmx-metrics-5.jar /otel/opentelemetry-jmx-metrics-5.jar
+COPY ./jmx/opentelemetry-jmx-metrics-6.jar /otel/opentelemetry-jmx-metrics-6.jar
+COPY ./jmx/opentelemetry-jmx-metrics-7.jar /otel/opentelemetry-jmx-metrics-7.jar
+COPY ./jmx/opentelemetry-jmx-metrics-9.jar /otel/opentelemetry-jmx-metrics-8.jar
+COPY ./jmx/opentelemetry-jmx-metrics-9.jar /otel/opentelemetry-jmx-metrics-9.jar
+COPY ./jmx/opentelemetry-jmx-metrics-10.jar /otel/opentelemetry-jmx-metrics-10.jar
+COPY ./jmx/opentelemetry-jmx-metrics-11.jar /otel/opentelemetry-jmx-metrics-11.jar
+COPY ./jmx/opentelemetry-jmx-metrics-12.jar /otel/opentelemetry-jmx-metrics-12.jar
+COPY ./jmx/opentelemetry-jmx-metrics-13.jar /otel/opentelemetry-jmx-metrics-13.jar
+

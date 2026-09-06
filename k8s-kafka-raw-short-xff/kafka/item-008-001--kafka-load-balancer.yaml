@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: kafka-xff-lb-to-listeners
+  namespace: kafka-xff-nm
+  labels:
+    app: kafka-xff-app
+spec:
+  selector:
+    app: kafka-xff-app
+  ports:
+    - name: kafka-xff-lbport
+      port: 10074
+      targetPort: 9094
+  type: LoadBalancer

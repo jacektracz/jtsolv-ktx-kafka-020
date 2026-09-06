@@ -1,0 +1,1 @@
+CREATE SCHEMA `jtsolv_gamedices_3` DEFAULT CHARACTER SET utf8 ;

@@ -1,0 +1,56 @@
+mode: deployment
+
+image:
+  repository: otel/opentelemetry-collector-k8s
+
+presets:
+  logsCollection:
+    enabled: true
+    includeCollectorLogs: true
+
+
+config:
+  receivers:
+    prometheus:
+      config:
+        scrape_configs:
+        - job_name: 'otel-node-exporter'
+          scrape_interval: 10s
+          static_configs:
+          - targets: ['10.43.98.180:9100']
+
+  extensions:
+    basicauth:
+      client_auth: 
+        username: "923400"
+        password: "xx=="
+    basicauth/2:
+      client_auth: 
+        username: "1646953"
+        password: "xx"
+  exporters:
+    otlp:
+      endpoint: tempo-prod-04-prod-us-east-0.grafana.net:443
+      headers:
+          authorization: Basic xx=
+    otlphttp:
+      endpoint: https://logs-prod-006.grafana.net/otlp
+      auth:
+        authenticator: basicauth
+    otlphttp/2:
+      endpoint: https://prometheus-prod-13-prod-us-east-0.grafana.net/otlp
+      auth:
+        authenticator: basicauth/2
+
+  service:
+      extensions: [basicauth,basicauth/2,health_check]
+      pipelines:
+        traces:
+          exporters:
+            - otlp
+        logs:
+          exporters:
+            - otlphttp
+        metrics:
+          exporters:
+            - otlphttp/2

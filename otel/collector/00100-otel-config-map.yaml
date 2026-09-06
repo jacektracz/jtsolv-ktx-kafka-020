@@ -1,0 +1,42 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: otel-collector-config
+  namespace: observability-xuu
+  #jar_path: /otel/opentelemetry-jmx-metrics.jar
+  #jar_validation_disabled: true
+data:
+  otel-config.yaml: |
+
+    receivers:
+      otlp:      
+        protocols:
+          grpc:
+          http:    
+
+      jmx/kafka:
+        jar_path: /otel/opentelemetry-jmx-metrics-13.jar
+        endpoint: service:jmx:rmi:///jndi/rmi://kafka-xff-sts-0.kafka-xff-headless-service.kafka-xff-nm.svc.cluster.local:9999/jmxrmi
+        target_system: kafka                
+        collection_interval: 30s
+
+    processors:
+      batch: {}
+
+    exporters:
+      prometheus:
+        endpoint: "0.0.0.0:9464"
+      debug:
+        verbosity: detailed
+
+    service:
+      pipelines:
+        metrics:
+          receivers: [jmx/kafka]
+          processors: [batch]
+          exporters: [prometheus]
+
+        traces:                
+          receivers: [otlp]
+          processors: [batch]
+          exporters: [debug]
